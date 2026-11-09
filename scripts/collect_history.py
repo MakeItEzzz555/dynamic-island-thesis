@@ -39,7 +39,7 @@ def main():
     raw=subprocess.check_output(['git','-C',str(repo),'log','--all','--format=%H%x00%aI%x00%cI%x00%s%x00%b%x00%D%x00%x1e'],stderr=subprocess.DEVNULL).decode('utf-8','replace')
     records=[]
     for part in raw.split('\x1e'):
-        bits=part.strip('\r\n\x00 ').split('\x00')
+        bits=part.strip('\r\n').split('\x00')
         if len(bits)<6 or len(bits[0])!=40:continue
         sha,authored,committed,subject,body,refs=bits[:6]
         records.append({'sha':sha,'authored':authored,'committed':committed,'title':subject,'message':body.strip(),'refs':refs.strip()})
