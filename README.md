@@ -1,48 +1,51 @@
-# Island Studio v2 — Thesis engineering dashboard
+# Island Studio — DynamicIsland thesis dashboard
 
-Static GitHub Pages website with an **approved public milestone timeline**, plus a private history inventory workflow. No backend and no paid hosting needed.
+Public GitHub Pages site for documenting the evolution of a private native macOS Dynamic Island-style application, from the initial **July 2, 2026** commit through current development.
 
-## Publish the dashboard
+Live site: https://makeitezzz555.github.io/dynamic-island-thesis/
 
-Copy these files into the **public** `MakeItEzzz555/dynamic-island-thesis` repository, commit to `main`. Its existing GitHub Pages branch deployment updates automatically on each push. The Milestones tab reads `data/milestones.json` (public, read-only). The existing issue tracker still saves browser edits in localStorage; GitHub does not automatically sync them.
+## Current features
 
-## Collect history from your Mac (private, complete local refs)
+- Searchable, dated engineering timeline in **Milestones**, with curated historical events and a future acceptance roadmap.
+- Source-backed public aggregates in **Overview** and **Milestones**: reachable commits, PRs created, PRs merged, issues, and monthly activity. Numbers are evidence of recorded work, not claims of production acceptance.
+- Existing eight module/issue cards remain browser-local **editable planning drafts**; they are independent from actual app development status.
+- Public `data/milestones.json` and `data/progress.json` are static, readable JSON, consumed automatically by the site.
+- No proprietary Swift code or raw private history is copied to this repository.
 
-The source is the **private** `MakeItEzzz555/DynamicIsland` repository, not the public site. From the website repo directory:
+## Local-first automatic synchronization
+
+A per-user macOS **launchd** job runs at **07:15 local time daily** on the registered Mac and invokes `scripts/sync_local.py`.
+
+The script safely fetches private remote-tracking refs, collects raw private history into the Git-ignored `.private/history-inventory.json`, derives public-only activity counters and publishes changes with selective Git commits/pushes when appropriate.
+
+For newly merged private PRs, it publishes only a **content-free Review placeholder** with the PR number and date. It never publishes private PR titles/bodies automatically. Detailed descriptions must be curated.
 
 ```bash
-python3 scripts/collect_history.py --repo-dir ../DynamicIsland
+python3 scripts/sync_local.py --collect-only  # only private inventory
+python3 scripts/sync_local.py --no-push       # prepare public JSON locally
+python3 scripts/sync_local.py                 # safely publish changed public JSON
+python3 scripts/validate_public.py
 ```
 
-The collector reads `git log --all` across local refs (branches and tags), including the full commit body. If `GH_TOKEN` is set, it also paginates GitHub pull requests and issues. The result is `.private/history-inventory.json` (gitignored, mode 600). **Never copy or commit this private inventory into the public site.** Running `git fetch --all --tags --prune` in your private repository before collecting makes its remote refs current, but does not recover deleted or unreachable history. Uncommitted changes and private documentation outside Git must be inventoried separately.
+The scheduler is installed by `python3 scripts/install_launchd.py`. It does not require Desktop Commander to be connected and consumes **zero GitHub Actions runner minutes for collection**. GitHub Pages deployments remain governed by GitHub's hosting service.
 
-For GitHub API access without putting a token into the website, install `gh` and run `gh auth login`, then:
+Full setup, schedule, safety boundaries, troubleshooting and recovery: **[Local synchronization guide](docs/LOCAL_SYNC.md)**.
 
-```bash
-export GH_TOKEN="$(gh auth token)"
-python3 scripts/collect_history.py --repo-dir ../DynamicIsland
-unset GH_TOKEN
-```
+## Historical milestones and roadmap
 
-`gh` must have read access to the private repo. Do not print or commit tokens.
+The initial manually curated timeline was constructed from private Git commits and merge-confirmed PR metadata, using intentionally high-level public summaries. The one-time curation builder is `scripts/build_curated_milestones.py`.
 
-## Set up private scheduled inventories (optional)
+**Do not schedule the curation builder**: it rewrites the seed snapshot and may replace subsequently reviewed milestone entries. The ongoing scheduler adds only privacy-safe placeholders for new merges.
 
-Copy `scripts/collect_history.py` into **the private repo** at the same path, and copy `templates/private-repo-history.yml` into that repo as `.github/workflows/history-inventory.yml`. It runs on demand and daily, reads private history using the private repository's scoped `GITHUB_TOKEN`, and uploads a **private workflow artifact** retained 14 days. Never place its output into the public website. Actions may be delayed or blocked by billing/usage limits. GitHub-hosted Actions checkouts include reachable repo history with `fetch-depth: 0`; only your Mac can add unpushed local refs.
+PR numbers can have gaps, and a closed PR is not necessarily merged. A merge is not evidence that installed-app, hardware, permission or distribution acceptance has been completed.
 
-## Approve and publish milestones
+## Privacy and collaboration
 
-1. Review `.private/history-inventory.json`, plus local documentation, screenshots, and branch history.
-2. Create one factual, concise entry per approved milestone in `data/milestones.json`, using the schema in `data/milestones.example.json`. Set status based on actual evidence, not titles alone. Record commit/PR URLs, caveats and acceptance gates. **A PR created is not necessarily merged.**
-3. Remove confidential discussions, internal implementation details, secrets, private file links not intended for viewers, identifying data and unreleased screenshots. Even titles, SHAs and PR numbers can disclose information; publication is intentional.
-4. Run `python3 scripts/validate_public.py`; commit only the approved JSON. Your GitHub Pages deployment updates after that commit. The site then shows the timeline in a searchable and filterable Milestones tab.
+- The macOS application source repository remains private: `MakeItEzzz555/DynamicIsland`.
+- The GitHub Pages source repository is public: `MakeItEzzz555/dynamic-island-thesis`.
+- Raw history, private branch names, internal code and tokens must never be committed to the public repository. Local inventory lives under `.private/`, excluded by `.gitignore`.
+- Browser-local issue edits and screenshots do not automatically synchronize across devices. For shared changes use explicit export/import or a future authenticated backend.
+- The separate private GitHub Actions history workflow has been **disabled** to conserve the account's GitHub Actions quota. The local launchd scheduler is the active automation.
+- `scripts/validate_public.py` checks JSON shape and links, but cannot prove that an authored narrative is confidentially safe. Public descriptions still require judgment.
 
-The public repository CI workflow validates schema, not confidentiality. An explicit human approval gate is intentional. Automating private-to-public publication without reviewing the data is **not recommended**.
-
-## Scope and limitations
-
-- The site cannot independently read your private repo from a visitor's browser.
-- The daily job is an inventory/monitoring workflow, **not** an autonomous AI interpretation engine. It does not consume ChatGPT Work usage.
-- This version does not sync browser-local issue edits or screenshots across browsers. For shared editing, GitHub Issues/Projects (with owner authentication) or another backend is needed.
-- Milestone and issue statuses are independent; fixture tests, CI tests, packaged builds and physical installed-app acceptance are distinct.
-- Keep the public dashboard repo separate from the private macOS application repo.
+This static site has no client-side GitHub access token or private repository credentials.
