@@ -1,5 +1,816 @@
 {
   "schemaVersion": 1,
-  "generatedAt": null,
-  "milestones": []
+  "generatedAt": "2026-11-09T04:33:33.004772+00:00",
+  "milestones": [
+    {
+      "id": "roadmap-05",
+      "date": "2026-11-09",
+      "kind": "Release",
+      "title": "Distribution readiness",
+      "summary": "Complete packaged-app regression, signing, rollback and release documentation.",
+      "status": "Planned",
+      "caveat": "Planning snapshot, not a verified implementation or promised completion date.",
+      "evidence": []
+    },
+    {
+      "id": "roadmap-04",
+      "date": "2026-11-09",
+      "kind": "Fix",
+      "title": "Outstanding notification and file tray UX",
+      "summary": "Resolve any remaining notification permission and file tray layout regressions against observed builds.",
+      "status": "Planned",
+      "caveat": "Planning snapshot, not a verified implementation or promised completion date.",
+      "evidence": []
+    },
+    {
+      "id": "roadmap-03",
+      "date": "2026-11-09",
+      "kind": "Testing",
+      "title": "Performance acceptance measurements",
+      "summary": "Capture device-specific frame timing, energy and interaction measurements rather than assuming 120 fps.",
+      "status": "Planned",
+      "caveat": "Planning snapshot, not a verified implementation or promised completion date.",
+      "evidence": []
+    },
+    {
+      "id": "roadmap-02",
+      "date": "2026-11-09",
+      "kind": "Testing",
+      "title": "Physical hardware and permission verification",
+      "summary": "Finish supervised physical Mac testing, privacy/permissions checks and installed-app acceptance.",
+      "status": "Planned",
+      "caveat": "Planning snapshot, not a verified implementation or promised completion date.",
+      "evidence": []
+    },
+    {
+      "id": "roadmap-01",
+      "date": "2026-11-09",
+      "kind": "Architecture",
+      "title": "Complete cross-display native acceptance",
+      "summary": "Validate notch-aware geometry, widget sizing and navigation across supported displays.",
+      "status": "Planned",
+      "caveat": "Planning snapshot, not a verified implementation or promised completion date.",
+      "evidence": []
+    },
+    {
+      "id": "pr-082",
+      "date": "2026-11-09",
+      "kind": "Decision",
+      "title": "Private development-history automation",
+      "summary": "Established private read-only history collection with scheduled workflow support.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #82. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-081",
+      "date": "2026-11-09",
+      "kind": "Fix",
+      "title": "Motion, tabs and Shortcuts polish",
+      "summary": "Addressed collapse motion, tab transitions and launcher behavior.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #81. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-080",
+      "date": "2026-11-09",
+      "kind": "Feature",
+      "title": "Agent model and reasoning controls",
+      "summary": "Improved message composer, model selection and reasoning controls.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #80. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-079",
+      "date": "2026-11-09",
+      "kind": "Feature",
+      "title": "Animation timing preferences",
+      "summary": "Adjusted island animation presets and interaction timing.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #79. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-078",
+      "date": "2026-11-09",
+      "kind": "Feature",
+      "title": "Calmer agent composer",
+      "summary": "Refined idle-state presentation and agent chat feedback.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #78. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-077",
+      "date": "2026-11-08",
+      "kind": "Feature",
+      "title": "Workspace widgets and privacy controls",
+      "summary": "Integrated native widgets, notifications, connections, Shortcuts and permission prompts.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #77. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-076",
+      "date": "2026-10-23",
+      "kind": "Testing",
+      "title": "Speech and accessibility validation",
+      "summary": "Improved native capture isolation and accessibility validation coverage.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #76. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-075",
+      "date": "2026-10-23",
+      "kind": "Feature",
+      "title": "Teleprompter and speech support",
+      "summary": "Added script reading, voice follow, transcript and permission-aware agent assistance.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #75. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-073",
+      "date": "2026-10-21",
+      "kind": "Architecture",
+      "title": "Widget and agents lifecycle",
+      "summary": "Refined widget lifecycles, chat-only workspace and Shortcuts integration.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #73. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-071",
+      "date": "2026-10-21",
+      "kind": "Testing",
+      "title": "Release acceptance handoff",
+      "summary": "Recorded validation evidence and outstanding native acceptance requirements.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #71. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-070",
+      "date": "2026-10-21",
+      "kind": "Feature",
+      "title": "Calendar and communication tools",
+      "summary": "Advanced Calendar, audio control and communication launchers.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #70. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-069",
+      "date": "2026-10-21",
+      "kind": "Feature",
+      "title": "AirDrop and file conversion",
+      "summary": "Added native file-sharing and format-conversion widgets.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #69. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-068",
+      "date": "2026-10-21",
+      "kind": "Architecture",
+      "title": "Integrated Shortcuts widget packages",
+      "summary": "Combined feature packages into the unified widget system.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #68. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-067",
+      "date": "2026-10-21",
+      "kind": "Feature",
+      "title": "Camera, lyrics and recording widgets",
+      "summary": "Expanded access to camera, lyrics and screen recording tools.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #67. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-066",
+      "date": "2026-10-21",
+      "kind": "Feature",
+      "title": "Voice, Reminders and image tools",
+      "summary": "Added standalone voice, reminder and background-removal surfaces.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #66. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-065",
+      "date": "2026-10-21",
+      "kind": "Feature",
+      "title": "Rich Notes persistence",
+      "summary": "Improved structured Notes editing and Shortcuts interaction.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #65. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-064",
+      "date": "2026-10-20",
+      "kind": "Feature",
+      "title": "Window Snap standalone widget",
+      "summary": "Developed a dedicated native window management surface.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #64. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-063",
+      "date": "2026-10-20",
+      "kind": "Feature",
+      "title": "Standalone widgets, package A",
+      "summary": "Expanded independently accessible widgets and Keep Awake controls.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #63. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-062",
+      "date": "2026-10-20",
+      "kind": "Feature",
+      "title": "Launcher and Window Snap",
+      "summary": "Improved native launcher morphing and Window Snap controls.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #62. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-061",
+      "date": "2026-10-20",
+      "kind": "Fix",
+      "title": "Shortcuts carousel polish",
+      "summary": "Refined carousel alignment and added scroll verification.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #61. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-060",
+      "date": "2026-10-20",
+      "kind": "Architecture",
+      "title": "Unified native widget registry",
+      "summary": "Consolidated widget registration and navigation into a native Shortcuts system.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #60. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-059",
+      "date": "2026-10-20",
+      "kind": "Research",
+      "title": "Design-reference research",
+      "summary": "Documented a clean-room reference investigation for native interaction design.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #59. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-057",
+      "date": "2026-10-20",
+      "kind": "Fix",
+      "title": "Media refresh efficiency",
+      "summary": "Reduced redundant running-application snapshots during media refresh.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #57. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-055",
+      "date": "2026-10-20",
+      "kind": "Fix",
+      "title": "Widget feature reconciliation",
+      "summary": "Reconciled Notes, Keep Awake, Notifications and connectivity behavior.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #55. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-054",
+      "date": "2026-10-20",
+      "kind": "Research",
+      "title": "Notification and ProMotion investigation",
+      "summary": "Refined notification geometry and gathered controlled performance evidence.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #54. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-053",
+      "date": "2026-10-20",
+      "kind": "Fix",
+      "title": "Notes persistence resilience",
+      "summary": "Improved editing and save-failure behavior in Notes.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #53. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-052",
+      "date": "2026-10-20",
+      "kind": "Research",
+      "title": "Motion and notification research",
+      "summary": "Recorded clean-room interface observations and performance baseline work.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #52. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-048",
+      "date": "2026-10-20",
+      "kind": "Decision",
+      "title": "Native Shortcuts rearchitecture",
+      "summary": "Documented the shift toward independently addressable native widgets.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #48. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-046",
+      "date": "2026-10-20",
+      "kind": "Feature",
+      "title": "Productivity widget expansion",
+      "summary": "Expanded widgets, connection status and related island behavior.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #46. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-045",
+      "date": "2026-10-20",
+      "kind": "Feature",
+      "title": "Terminal, lyrics and Mac Duo",
+      "summary": "Advanced the native terminal, synchronized lyrics and display-fold experience.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #45. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-044",
+      "date": "2026-10-17",
+      "kind": "Testing",
+      "title": "Stabilization checkpoint",
+      "summary": "Integrated final-review fixes and additional validation evidence.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #44. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-043",
+      "date": "2026-10-16",
+      "kind": "Research",
+      "title": "Interaction and roadmap review",
+      "summary": "Captured an implementation review and interaction roadmap checkpoint.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #43. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-040",
+      "date": "2026-10-15",
+      "kind": "Research",
+      "title": "Lock Screen widget experiment",
+      "summary": "Documented and integrated an opt-in experimental lock-screen prototype.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #40. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-039",
+      "date": "2026-10-15",
+      "kind": "Feature",
+      "title": "Per-app audio controls",
+      "summary": "Implemented an experimental per-app volume mixing interface.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #39. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-038",
+      "date": "2026-10-15",
+      "kind": "Fix",
+      "title": "Camera and audio synchronization",
+      "summary": "Improved deterministic waits and pointer-driven feedback.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #38. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-037",
+      "date": "2026-10-15",
+      "kind": "Feature",
+      "title": "Voice recording widget",
+      "summary": "Introduced a native recorder with optional transcription.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #37. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-036",
+      "date": "2026-10-15",
+      "kind": "Fix",
+      "title": "Agent send-button feedback",
+      "summary": "Restored native hover feedback and removed duplicate glow effects.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #36. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-035",
+      "date": "2026-10-15",
+      "kind": "Testing",
+      "title": "CI reliability repairs",
+      "summary": "Improved post-merge validation without removing native assertions.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #35. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-034",
+      "date": "2026-10-14",
+      "kind": "Feature",
+      "title": "Native experience refinement",
+      "summary": "Continued the native interface integration effort.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #34. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-033",
+      "date": "2026-10-14",
+      "kind": "Feature",
+      "title": "Native widget and audio integration",
+      "summary": "Integrated native widgets, audio surfaces and notch menu behavior.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #33. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-032",
+      "date": "2026-10-14",
+      "kind": "Feature",
+      "title": "Camera navigation gestures",
+      "summary": "Added separate hand and pointer navigation paths for the camera.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #32. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-030",
+      "date": "2026-10-09",
+      "kind": "Fix",
+      "title": "Media and agent interaction continuity",
+      "summary": "Repaired page attachment, tab continuity and message sending priorities.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #30. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-029",
+      "date": "2026-10-09",
+      "kind": "Fix",
+      "title": "Gesture navigation consistency",
+      "summary": "Follow-up corrections for gesture configuration.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #29. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-028",
+      "date": "2026-10-09",
+      "kind": "Fix",
+      "title": "Gesture navigation settings",
+      "summary": "Improved gesture navigation preferences and handling.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #28. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-027",
+      "date": "2026-10-09",
+      "kind": "Fix",
+      "title": "Gesture-only layout alignment",
+      "summary": "Corrected notch-centered positioning in gesture-only mode.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #27. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-026",
+      "date": "2026-10-09",
+      "kind": "Feature",
+      "title": "Two-finger navigation",
+      "summary": "Introduced gesture-only navigation and native Settings organization.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #26. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-024",
+      "date": "2026-10-09",
+      "kind": "Feature",
+      "title": "Agent interface continuation",
+      "summary": "Refined the agents interface after the initial overhaul.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #24. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-025",
+      "date": "2026-10-07",
+      "kind": "Feature",
+      "title": "Agent experience stabilization",
+      "summary": "Continued integration and refinement of the agents interface.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #25. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-022",
+      "date": "2026-09-28",
+      "kind": "Feature",
+      "title": "Managed agent controls",
+      "summary": "Extended agent session control capabilities.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #22. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-021",
+      "date": "2026-09-27",
+      "kind": "Fix",
+      "title": "Navigation geometry transition",
+      "summary": "Deferred geometry changes until page selection was committed.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #21. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-018",
+      "date": "2026-09-27",
+      "kind": "Architecture",
+      "title": "Agents interface overhaul",
+      "summary": "Reorganized the presentation and interaction of the agent experience.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #18. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-017",
+      "date": "2026-09-25",
+      "kind": "Testing",
+      "title": "Agent activity validation",
+      "summary": "Strengthened tests and completion evidence for agent activity.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #17. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-016",
+      "date": "2026-09-25",
+      "kind": "Feature",
+      "title": "Agent activity continuation",
+      "summary": "Expanded the managed activity and chat interaction flow.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #16. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-015",
+      "date": "2026-09-25",
+      "kind": "Feature",
+      "title": "Agent activity iteration",
+      "summary": "Extended the first agent activity implementation.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #15. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-014",
+      "date": "2026-09-24",
+      "kind": "Feature",
+      "title": "Initial agent activity integration",
+      "summary": "Connected agent activity to the island experience.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #14. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-013",
+      "date": "2026-09-24",
+      "kind": "Decision",
+      "title": "Agent activity architecture checkpoint",
+      "summary": "Established a technical checkpoint before deeper agent integration.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #13. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-012",
+      "date": "2026-09-24",
+      "kind": "Fix",
+      "title": "Correctness stabilization",
+      "summary": "Completed a targeted correctness and regression repair.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #12. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-011",
+      "date": "2026-09-19",
+      "kind": "Fix",
+      "title": "Foundational reliability audit",
+      "summary": "Addressed issues identified in the initial engineering audit.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #11. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-010",
+      "date": "2026-07-25",
+      "kind": "Fix",
+      "title": "Clipboard keyboard and capture handling",
+      "summary": "Corrected Escape routing and long-text clipboard handling.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #10. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-009",
+      "date": "2026-07-24",
+      "kind": "Feature",
+      "title": "Clipboard history interface",
+      "summary": "Implemented in-island clipboard history interaction.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #9. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-008",
+      "date": "2026-07-24",
+      "kind": "Feature",
+      "title": "Clipboard history engine",
+      "summary": "Added a native clipboard-history capability.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #8. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-007",
+      "date": "2026-07-24",
+      "kind": "Fix",
+      "title": "Media artwork transition timing",
+      "summary": "Aligned artwork changes to visual transition timing.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #7. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-006",
+      "date": "2026-07-24",
+      "kind": "Feature",
+      "title": "Live Activity visibility settings",
+      "summary": "Added controls governing visibility of expanded live activities.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #6. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-005",
+      "date": "2026-07-21",
+      "kind": "Fix",
+      "title": "Compact activity balance",
+      "summary": "Balanced left and right activity regions in compact mode.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #5. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-004",
+      "date": "2026-07-21",
+      "kind": "Feature",
+      "title": "Island theme foundations",
+      "summary": "Introduced customization for the island visual appearance.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #4. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-003",
+      "date": "2026-07-21",
+      "kind": "Fix",
+      "title": "Compact shoulder refinements",
+      "summary": "Adjusted the collapsed island contour and proportions.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #3. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-002",
+      "date": "2026-07-21",
+      "kind": "Architecture",
+      "title": "Notch shoulder composition",
+      "summary": "Developed layered blending around the collapsed island shell.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #2. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "pr-001",
+      "date": "2026-07-21",
+      "kind": "Architecture",
+      "title": "Early interface development",
+      "summary": "Iterated on the initial native notch-aware interface and core window behavior.",
+      "status": "Done",
+      "caveat": "Recorded in merged private PR #1. Merge alone does not establish installed-app, device or release acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "foundation-08",
+      "date": "2026-07-02",
+      "kind": "Architecture",
+      "title": "Stable overlay animation strategy",
+      "summary": "Shifted animations toward the island surface instead of changing the panel frame.",
+      "status": "Done",
+      "caveat": "Grounded in a July 2026 Git commit; implementation history, not release certification.",
+      "evidence": []
+    },
+    {
+      "id": "foundation-07",
+      "date": "2026-07-02",
+      "kind": "Feature",
+      "title": "Functional media controls",
+      "summary": "Connected initial playback controls with the animated island.",
+      "status": "Done",
+      "caveat": "Grounded in a July 2026 Git commit; implementation history, not release certification.",
+      "evidence": []
+    },
+    {
+      "id": "foundation-06",
+      "date": "2026-07-02",
+      "kind": "Fix",
+      "title": "Stable compact notch geometry",
+      "summary": "Reworked compact island sizing and placement stability.",
+      "status": "Done",
+      "caveat": "Grounded in a July 2026 Git commit; implementation history, not release certification.",
+      "evidence": []
+    },
+    {
+      "id": "foundation-05",
+      "date": "2026-07-02",
+      "kind": "Fix",
+      "title": "Island sizing stability",
+      "summary": "Reduced inconsistencies in expansion geometry and state.",
+      "status": "Done",
+      "caveat": "Grounded in a July 2026 Git commit; implementation history, not release certification.",
+      "evidence": []
+    },
+    {
+      "id": "foundation-04",
+      "date": "2026-07-02",
+      "kind": "Fix",
+      "title": "Top-bezel island alignment",
+      "summary": "Corrected the expanded island position against the top bezel.",
+      "status": "Done",
+      "caveat": "Grounded in a July 2026 Git commit; implementation history, not release certification.",
+      "evidence": []
+    },
+    {
+      "id": "foundation-03",
+      "date": "2026-07-02",
+      "kind": "Feature",
+      "title": "First expansion animations",
+      "summary": "Began iterating on expanded island entrance motion.",
+      "status": "Done",
+      "caveat": "Grounded in a July 2026 Git commit; implementation history, not release certification.",
+      "evidence": []
+    },
+    {
+      "id": "foundation-02",
+      "date": "2026-07-02",
+      "kind": "Feature",
+      "title": "Early Spotify integration",
+      "summary": "Extended initial island behavior and Spotify media support.",
+      "status": "Done",
+      "caveat": "Grounded in a July 2026 Git commit; implementation history, not release certification.",
+      "evidence": []
+    },
+    {
+      "id": "foundation-01",
+      "date": "2026-07-02",
+      "kind": "Architecture",
+      "title": "First native macOS application",
+      "summary": "Created the first macOS Dynamic Island-style app foundation.",
+      "status": "Done",
+      "caveat": "Grounded in a July 2026 Git commit; implementation history, not release certification.",
+      "evidence": []
+    }
+  ]
 }

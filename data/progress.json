@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "firstCommit": "2026-07-02",
+  "lastCommit": "2026-11-09",
+  "reachableCommits": 1072,
+  "pullRequests": 78,
+  "mergedPullRequests": 68,
+  "issues": 4,
+  "commitsByMonth": [
+    {
+      "month": "2026-07",
+      "commits": 78
+    },
+    {
+      "month": "2026-09",
+      "commits": 387
+    },
+    {
+      "month": "2026-10",
+      "commits": 564
+    },
+    {
+      "month": "2026-11",
+      "commits": 43
+    }
+  ],
+  "scope": "Reachable local Git refs and GitHub PR/issue metadata; not all work or tests.",
+  "verification": "Counts are evidence of recorded activity, not proof of feature or release acceptance."
+}
