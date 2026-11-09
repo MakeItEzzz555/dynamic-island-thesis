@@ -1,34 +1,48 @@
-# Island Studio — macOS Engineering Workspace
+# Island Studio v2 — Thesis engineering dashboard
 
-A responsive, Apple-inspired static dashboard for tracking development of a macOS Dynamic Island-style app and documenting thesis progress.
+Static GitHub Pages website with an **approved public milestone timeline**, plus a private history inventory workflow. No backend and no paid hosting needed.
 
-## Run locally
+## Publish the dashboard
 
-Open `index.html` in your browser. No dependencies, build tool, backend, package install, or paid hosting required.
+Copy these files into the **public** `MakeItEzzz555/dynamic-island-thesis` repository, commit to `main`. Its existing GitHub Pages branch deployment updates automatically on each push. The Milestones tab reads `data/milestones.json` (public, read-only). The existing issue tracker still saves browser edits in localStorage; GitHub does not automatically sync them.
 
-## Deploy to GitHub Pages
+## Collect history from your Mac (private, complete local refs)
 
-1. Create a **public repository** (for instance `island-studio`) or add these files to an existing public repository in a subdirectory you can publish.
-2. Commit `index.html` and `.nojekyll` at the repository root.
-3. Under **Settings → Pages → Build and deployment**, select **Deploy from a branch**, `main`, `/ (root)`, then Save.
-4. Visit `https://YOUR_GITHUB_USERNAME.github.io/island-studio/` when GitHub Pages publishes it.
+The source is the **private** `MakeItEzzz555/DynamicIsland` repository, not the public site. From the website repo directory:
 
-No custom domain is required. Follow [GitHub Pages documentation](https://docs.github.com/en/pages) for current publishing requirements and availability for your plan/repository visibility.
+```bash
+python3 scripts/collect_history.py --repo-dir ../DynamicIsland
+```
 
-## Persistence and collaboration
+The collector reads `git log --all` across local refs (branches and tags), including the full commit body. If `GH_TOKEN` is set, it also paginates GitHub pull requests and issues. The result is `.private/history-inventory.json` (gitignored, mode 600). **Never copy or commit this private inventory into the public site.** Running `git fetch --all --tags --prune` in your private repository before collecting makes its remote refs current, but does not recover deleted or unreachable history. Uncommitted changes and private documentation outside Git must be inventoried separately.
 
-The site uses browser **localStorage**. Edits (status, issue text, checklists, small screenshots) stay in the browser and are **not synchronized** with GitHub or other visitors. Use **Export JSON** to back up and share editable records; import through **Release Readiness → Import JSON**. Keep a project snapshot in the repository when desired, but the site does not currently load that snapshot automatically. This starter is best treated as a working prototype, not a multiuser issue tracker. Do not put confidential information in a public repo.
+For GitHub API access without putting a token into the website, install `gh` and run `gh auth login`, then:
 
-For real shared collaboration, make GitHub Issues/Projects the canonical backend and add GitHub Actions to produce a sanitized public JSON snapshot during deploy. Never put a personal access token in client JavaScript.
+```bash
+export GH_TOKEN="$(gh auth token)"
+python3 scripts/collect_history.py --repo-dir ../DynamicIsland
+unset GH_TOKEN
+```
 
-## Existing issue scope
+`gh` must have read access to the private repo. Do not print or commit tokens.
 
-Seeded reports: File Tray horizontal layout, MCP Connections scroll height, Notifications/Focus privacy and permissions. Other modules (Agents Chat, Teleprompter, Window Snap, Keep Awake and Shortcuts) are planning entries, not verified defects or claims of implementation status. All statuses are illustrative until checked against the source repository.
+## Set up private scheduled inventories (optional)
 
-## Accessibility and design
+Copy `scripts/collect_history.py` into **the private repo** at the same path, and copy `templates/private-repo-history.yml` into that repo as `.github/workflows/history-inventory.yml`. It runs on demand and daily, reads private history using the private repository's scoped `GITHUB_TOKEN`, and uploads a **private workflow artifact** retained 14 days. Never place its output into the public website. Actions may be delayed or blocked by billing/usage limits. GitHub-hosted Actions checkouts include reachable repo history with `fetch-depth: 0`; only your Mac can add unpushed local refs.
 
-System-first font stack, keyboard-visible focus, responsive sidebar, semantic table, labeled fields, reduced-motion support, clear selected states and readable contrast. For implementation decisions reference official [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) and [Apple Developer Documentation](https://developer.apple.com/documentation/).
+## Approve and publish milestones
 
-## Dependencies
+1. Review `.private/history-inventory.json`, plus local documentation, screenshots, and branch history.
+2. Create one factual, concise entry per approved milestone in `data/milestones.json`, using the schema in `data/milestones.example.json`. Set status based on actual evidence, not titles alone. Record commit/PR URLs, caveats and acceptance gates. **A PR created is not necessarily merged.**
+3. Remove confidential discussions, internal implementation details, secrets, private file links not intended for viewers, identifying data and unreleased screenshots. Even titles, SHAs and PR numbers can disclose information; publication is intentional.
+4. Run `python3 scripts/validate_public.py`; commit only the approved JSON. Your GitHub Pages deployment updates after that commit. The site then shows the timeline in a searchable and filterable Milestones tab.
 
-None. Site is fully static and does not consume Vercel, Work or cloud build model credits when viewed on GitHub Pages.
+The public repository CI workflow validates schema, not confidentiality. An explicit human approval gate is intentional. Automating private-to-public publication without reviewing the data is **not recommended**.
+
+## Scope and limitations
+
+- The site cannot independently read your private repo from a visitor's browser.
+- The daily job is an inventory/monitoring workflow, **not** an autonomous AI interpretation engine. It does not consume ChatGPT Work usage.
+- This version does not sync browser-local issue edits or screenshots across browsers. For shared editing, GitHub Issues/Projects (with owner authentication) or another backend is needed.
+- Milestone and issue statuses are independent; fixture tests, CI tests, packaged builds and physical installed-app acceptance are distinct.
+- Keep the public dashboard repo separate from the private macOS application repo.
