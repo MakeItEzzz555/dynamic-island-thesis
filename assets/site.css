@@ -394,6 +394,9 @@ figcaption { font: 400 .8125rem/1.5 var(--font); color: var(--ink-3); margin-top
 .shot { margin: 0; }
 .shot button { padding: 0; border: 1px solid var(--hairline); border-radius: 10px; overflow: hidden; background: #0d0d0c; cursor: zoom-in; display: block; width: 100%; }
 .shot img { width: 100%; height: 190px; object-fit: contain; transition: transform var(--dur-3) var(--ease-out); }
+.shot.wide { grid-column: 1 / -1; }
+.shot.wide button { width: auto; max-width: 100%; display: inline-block; vertical-align: top; }
+.shot.wide img { width: auto; height: auto; max-width: 100%; max-height: 260px; }
 .shot button:hover img { transform: scale(1.02); }
 .lightbox { border: 0; padding: 0; background: transparent; max-width: min(1200px, 94vw); max-height: 92vh; }
 .lightbox::backdrop { background: rgb(10 10 9 / 82%); }

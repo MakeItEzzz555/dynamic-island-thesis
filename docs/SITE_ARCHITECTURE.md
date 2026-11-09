@@ -37,7 +37,12 @@ Security: no credentials in the page; issue titles and bodies are rendered as es
 
 ## Screenshots
 
-Captured with the app's built-in acceptance modes (`--validate-features`, `--validate-settings`, `--validate-parity`), which render the app's own windows with sample content. They do not record the desktop. Every image was reviewed for personal data before inclusion (terminal captures showing the user's temp path and the clipboard pane listing installed apps were excluded), then converted with `cwebp -q 86`. To add one: put `<name>.webp` in `assets/screenshots/`, add a caption under `screenshots.items` in `thesis.json`, reference it from a feature's `shots`, and run the validator.
+29 WebP images in `assets/screenshots/`, each placed once under its feature in `thesis.json` (`featureGroups[].items[].shots`, captions in `screenshots.items`). Two sources, both from 9 Nov 2026:
+
+- **Acceptance harness** (14): the app's built-in modes (`--validate-features`, `--validate-settings`, `--validate-parity`) render its own windows with sample content. Excluded from this set: terminal captures showing a local temp path, and the clipboard settings pane listing installed apps.
+- **Author's Mac** (15): screenshots the owner took during normal use, published at the owner's request on 9 Nov 2026 (they show real notifications, music and clipboard entries). Each was cropped to the island so surrounding desktop content (Finder rows, document text, names) is not published. Originals are archived locally in `.private/raw-screenshots/`, which is git-ignored; raw `Screenshot *.png` files under `assets/` are git-ignored too.
+
+To add one: crop to the island, convert with `cwebp -q 86`, put `<name>.webp` in `assets/screenshots/`, add a caption under `screenshots.items`, reference it from a feature's `shots`, and run the validator. Panoramic images (wider than 2.6:1) automatically get a full-width row at their natural point size.
 
 ## Updating content
 
