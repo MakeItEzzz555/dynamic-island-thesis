@@ -362,7 +362,7 @@ figcaption { font: 400 .8125rem/1.5 var(--font); color: var(--ink-3); margin-top
 .milestone .caveat { font-size: .8125rem; color: var(--ink-3); }
 .fb-link { font-size: .8125rem; color: var(--ink-2); white-space: nowrap; }
 .empty, .error { padding: var(--s7) 0; border-bottom: 1px solid var(--hairline); display: grid; gap: 10px; justify-items: start; }
-.error { color: var(--vermilion); }
+.error { color: var(--ink); border-top: 3px solid var(--vermilion); }
 
 /* ---------- Challenges ---------- */
 .challenge-list { list-style: none; border-top: 4px solid var(--ink); }
