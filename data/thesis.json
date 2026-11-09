@@ -403,13 +403,20 @@
         {
           "name": "Notch-aware island shell",
           "status": "tests",
-          "detail": "One stable panel; the shell morphs between collapsed and expanded around the physical notch, or floats on notchless displays."
+          "detail": "One stable panel; the shell morphs between collapsed and expanded around the physical notch, or floats on notchless displays. Expanded, it hosts several widgets side by side.",
+          "shots": [
+            "collapsed-now-playing",
+            "expanded-notifications-media-volume"
+          ]
         },
         {
           "name": "Live Activities",
           "status": "tests",
-          "detail": "An internal activity model (not Apple's iOS-only ActivityKit); the collapsed island shows one winner chosen by deterministic priority.",
+          "detail": "An internal activity model (not Apple's iOS-only ActivityKit); the collapsed island shows one winner chosen by deterministic priority, with its own width around the notch.",
           "shots": [
+            "collapsed-media-peek",
+            "collapsed-agent-activity",
+            "agent-awaiting-update",
             "middle-liveActivities",
             "reduced-motion-liveActivities"
           ]
@@ -417,8 +424,9 @@
         {
           "name": "Workspace editor",
           "status": "tests",
-          "detail": "Drag to reorder and resize widgets in semantic sizes; Apply commits once, Cancel restores.",
+          "detail": "Drag to reorder and resize widgets in semantic sizes (Compact, Standard, Large) and add them from the dock; Apply commits once, Cancel restores.",
           "shots": [
+            "workspace-editor-live",
             "wide-shelf"
           ]
         },
@@ -452,7 +460,7 @@
         {
           "name": "App Volume",
           "status": "owner",
-          "detail": "Per-app volume through Core Audio process taps. Off by default; asks for System Audio Recording only when turned on. Experimental label removed on 9 Nov 2026 after the owner's hardware check (#84)."
+          "detail": "Per-app volume through Core Audio process taps (visible in the expanded island and workspace editor captures). Off by default; asks for System Audio Recording only when turned on. Experimental label removed on 9 Nov 2026 after the owner's hardware check (#84)."
         },
         {
           "name": "Voice recording",
@@ -462,8 +470,27 @@
       ]
     },
     {
-      "title": "Productivity widgets",
+      "title": "Shortcuts & productivity",
       "items": [
+        {
+          "name": "Shortcuts tab",
+          "status": "tests",
+          "detail": "A trackpad-scrollable row of native app icons. Apps such as Finder and Safari launch externally; island tools open as a standalone widget in place.",
+          "shots": [
+            "shortcuts-apps",
+            "shortcuts-tools",
+            "shortcuts-utilities"
+          ]
+        },
+        {
+          "name": "Focus timer",
+          "status": "tests",
+          "detail": "A scrubbable time ruler with Focus and Break presets, zoom and one completion sound; the idle minimum is one second on every input path.",
+          "shots": [
+            "focus-timer-break",
+            "focus-timer-ruler"
+          ]
+        },
         {
           "name": "Stay Awake",
           "status": "tests",
@@ -471,6 +498,23 @@
           "shots": [
             "awake-large",
             "awake-standard"
+          ]
+        },
+        {
+          "name": "Clipboard history",
+          "status": "tests",
+          "detail": "Opt-in history of copied text and images with pinning, tags and excluded apps; nothing is recorded until it is turned on.",
+          "shots": [
+            "clipboard-history"
+          ]
+        },
+        {
+          "name": "AirDrop, File Shelf and file conversion",
+          "status": "tests",
+          "detail": "Drop files to share them, keep them on a shelf, or convert images and audio.",
+          "shots": [
+            "airdrop-file-shelf",
+            "accepted-file-popup"
           ]
         },
         {
@@ -482,15 +526,7 @@
           ]
         },
         {
-          "name": "File conversion, AirDrop, File Tray",
-          "status": "tests",
-          "detail": "Drop files to convert, share or shelve them.",
-          "shots": [
-            "accepted-file-popup"
-          ]
-        },
-        {
-          "name": "Notes, Reminders, Calendar, Timer, Window Snap",
+          "name": "Notes, Reminders, Calendar, Window Snap",
           "status": "tests",
           "detail": "Standalone widgets in Compact, Standard and Large sizes."
         },
@@ -507,7 +543,7 @@
         {
           "name": "Notifications",
           "status": "tests",
-          "detail": "Banner, history and reply; other apps only on explicit opt-in.",
+          "detail": "Banner, history and reply; other apps only on explicit opt-in. Previews hide during protected interactions (see the workspace editor capture).",
           "shots": [
             "notifications-standard"
           ]
@@ -523,19 +559,25 @@
       "title": "AI agents",
       "items": [
         {
+          "name": "Agents composer",
+          "status": "merged",
+          "detail": "Start a chat with Codex or Claude, with model and reasoning controls and both providers' 5-hour and weekly usage (#80, landing on main through #83).",
+          "shots": [
+            "agents-new-chat"
+          ]
+        },
+        {
           "name": "Agent monitoring",
           "status": "tests",
-          "detail": "Codex and Claude Code activity through a loopback-only, HMAC-authenticated bridge."
+          "detail": "Codex and Claude Code sessions through a loopback-only, HMAC-authenticated bridge, with a live feed of session events.",
+          "shots": [
+            "agents-working"
+          ]
         },
         {
           "name": "Approvals",
           "status": "tests",
           "detail": "Codex permission requests can be approved from the island; failure always returns no decision."
-        },
-        {
-          "name": "Agents composer",
-          "status": "merged",
-          "detail": "Start a chat with model and reasoning controls (#80, landing on main through #83)."
         }
       ]
     },
@@ -573,7 +615,7 @@
     }
   ],
   "screenshots": {
-    "provenance": "Rendered on 9 Nov 2026 by the app's built-in native acceptance harness from the latest code, using sample content only. Approved for publication by the author.",
+    "provenance": "Two sources, both from 9 November 2026: captures rendered by the app's built-in acceptance harness with sample content, and screenshots the author took on their own Mac during normal use, which show real notifications, music and clipboard entries. Some author captures were taken before App Volume's Experimental label was removed. All were approved for publication by the author.",
     "items": {
       "media-lyrics-standard": "Media, Standard size, with synced lyrics",
       "media-lyrics-large": "Media, Large size, with lyrics and volume",
@@ -588,7 +630,22 @@
       "wide-shelf": "Settings: widget layout preview",
       "fullscreen-general": "Settings: General",
       "middle-moduleStore": "Settings: modules",
-      "wide-lockScreen": "Settings: experimental Lock Screen widgets"
+      "wide-lockScreen": "Settings: experimental Lock Screen widgets",
+      "collapsed-now-playing": "Collapsed island with Now Playing artwork and visualizer beside the notch",
+      "collapsed-media-peek": "Collapsed Now Playing live activity, track and time",
+      "expanded-notifications-media-volume": "Expanded island: Notifications, Media and App Volume side by side",
+      "collapsed-agent-activity": "Collapsed island while Claude Code is working, with the agent glow",
+      "agent-awaiting-update": "Agent live activity: DynamicIsland, awaiting update",
+      "workspace-editor-live": "Workspace editor: resize handles, removal and the widget dock",
+      "shortcuts-apps": "Shortcuts tab: launch Finder, Safari, System Settings",
+      "shortcuts-tools": "Shortcuts tab: Quick Terminal, Window Snap, Voice Recording",
+      "shortcuts-utilities": "Shortcuts tab: Notes, Keep Awake, Notifications",
+      "focus-timer-break": "Focus timer ruler on the Break preset",
+      "focus-timer-ruler": "Focus timer ruler with the time scale",
+      "airdrop-file-shelf": "AirDrop and File Shelf drop targets",
+      "clipboard-history": "Clipboard history in the island (the author's real clipboard)",
+      "agents-new-chat": "Agents: new chat with Codex and Claude usage rings",
+      "agents-working": "Agents: a Claude session working, with the live feed"
     }
   },
   "architecture": [

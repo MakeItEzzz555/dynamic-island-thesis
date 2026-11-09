@@ -319,7 +319,7 @@ function viewFeatures() {
   return `
   <div class="page-head">
     <h1 class="page-title wide" tabindex="-1">Features & architecture</h1>
-    <p class="lede">What the island does today, how its parts fit together, and the evidence behind each status. Screenshots are real captures from the app with sample content.</p>
+    <p class="lede">What the island does today, how its parts fit together, and the evidence behind each status. Screenshots are real captures of the app, from its test harness and from the author's own Mac.</p>
   </div>
   <section class="section-rule stack-s" aria-labelledby="arch-h">
     <h2 class="h2" id="arch-h">How it is built</h2>
@@ -612,6 +612,8 @@ function initEvents() {
     if (e.target.closest('[data-retry-feedback]')) { loadFeedback(true).then(refreshThreads); refreshThreads(); return; }
     const lb = e.target.closest('[data-lightbox]'); if (lb) lightbox(lb.dataset.lightbox);
   });
+  // Panoramic captures (the expanded island, the editor) get a full-width row so they stay legible.
+  document.addEventListener('load', (e) => { const im = e.target; if (im.tagName === 'IMG' && im.closest('.shot')) { const wide = im.naturalWidth / im.naturalHeight > 2.6; im.closest('.shot').classList.toggle('wide', wide); if (wide) im.style.maxWidth = `${im.naturalWidth / 2}px`; } }, true);
   document.addEventListener('submit', (e) => {
     if (e.target.id !== 'composer') return;
     e.preventDefault();
