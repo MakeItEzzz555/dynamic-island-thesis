@@ -1,16 +1,36 @@
-# Island Studio — DynamicIsland thesis dashboard
+# Island Studio — DynamicIsland thesis site
 
-Public GitHub Pages site for documenting the evolution of a private native macOS Dynamic Island-style application, from the initial **July 2, 2026** commit through current development.
+Public GitHub Pages site documenting how a private native macOS application, DynamicIsland, evolved from its first commit on **2 July 2026** to today, written for a university supervisor who is not a Swift specialist.
 
 Live site: https://makeitezzz555.github.io/dynamic-island-thesis/
 
-## Current features
+## What the site contains
 
-- Searchable, dated engineering timeline in **Milestones**, with curated historical events and a future acceptance roadmap.
-- Source-backed public aggregates in **Overview** and **Milestones**: reachable commits, PRs created, PRs merged, issues, and monthly activity. Numbers are evidence of recorded work, not claims of production acceptance.
-- Existing eight module/issue cards remain browser-local **editable planning drafts**; they are independent from actual app development status.
-- Public `data/milestones.json` and `data/progress.json` are static, readable JSON, consumed automatically by the site.
-- No proprietary Swift code or raw private history is copied to this repository.
+| Section | Route | Source |
+|---|---|---|
+| Overview | `#/` | `data/thesis.json`, `data/progress.json` |
+| Journey (five phases + searchable explorer) | `#/journey`, `#/journey/<phase>` | `data/thesis.json` phases, `data/milestones.json` |
+| Features & architecture | `#/features` | `data/thesis.json`, `assets/screenshots/` |
+| Engineering challenges | `#/challenges`, `#/challenges/<id>` | `data/thesis.json` |
+| Research & decisions | `#/decisions` | `data/thesis.json` |
+| Roadmap | `#/roadmap` | `data/thesis.json`, review placeholders in `data/milestones.json` |
+| Testing & quality | `#/quality` | `data/thesis.json` |
+| Supervisor review | `#/review` | GitHub Issues labelled `feedback` |
+
+The former browser-local tracker is preserved unchanged at `workspace.html` (not linked from the main navigation; drafts saved in a browser stay readable there).
+
+Architecture, data contracts, feedback flow and maintenance: **[Site architecture](docs/SITE_ARCHITECTURE.md)**. Visual system: **[DESIGN.md](DESIGN.md)**.
+
+## Supervisor feedback
+
+Feedback is a GitHub issue on this public repository, created from the form in `.github/ISSUE_TEMPLATE/feedback.yml`. The site links to it with the subject prefilled and reads status from GitHub's public API (no token in the page):
+
+- open, no status label → **Pending**
+- label `status: acknowledged` → **Acknowledged**
+- label `status: addressed` → **Addressed**
+- closed as completed → **Resolved** (closed as not planned → **Closed**)
+
+A supervisor needs a free GitHub account, and feedback is public.
 
 ## Local-first automatic synchronization
 
@@ -44,7 +64,7 @@ PR numbers can have gaps, and a closed PR is not necessarily merged. A merge is 
 - The macOS application source repository remains private: `MakeItEzzz555/DynamicIsland`.
 - The GitHub Pages source repository is public: `MakeItEzzz555/dynamic-island-thesis`.
 - Raw history, private branch names, internal code and tokens must never be committed to the public repository. Local inventory lives under `.private/`, excluded by `.gitignore`.
-- Browser-local issue edits and screenshots do not automatically synchronize across devices. For shared changes use explicit export/import or a future authenticated backend.
+- The owner workspace (`workspace.html`) stores drafts in one browser only; shared feedback goes through GitHub Issues.
 - The separate private GitHub Actions history workflow has been **disabled** to conserve the account's GitHub Actions quota. The local launchd scheduler is the active automation.
 - `scripts/validate_public.py` checks JSON shape and links, but cannot prove that an authored narrative is confidentially safe. Public descriptions still require judgment.
 

@@ -39,7 +39,7 @@ python3 scripts/validate_public.py
 - `git log --all` includes reachable commits, not unreachable or deleted history, uncommitted files, or hidden development on other machines.
 - Pull request totals are PR objects, not PR number, and "merged" does not imply shipped or physically verified.
 - GitHub PR merge timestamps and Git commit dates ground the historical dates. The July starting point is July 2, 2026.
-- The website's 8 localStorage issue cards are editable draft planning entries, **not** canonical verified app status.
+- The owner workspace (`workspace.html`, the former main page) keeps its browser-local draft cards; they are **not** canonical verified app status.
 - Scheduled updates cannot use AI to reconstruct meaningful resolution narratives: newly merged PRs remain labeled `Review` until their technical details are curated.
 
 ## Security and recovery
