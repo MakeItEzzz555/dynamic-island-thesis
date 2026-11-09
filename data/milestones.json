@@ -387,7 +387,7 @@
       "date": "2026-10-15",
       "kind": "Feature",
       "title": "Per-app audio controls",
-      "summary": "Implemented an experimental per-app volume mixing interface.",
+      "summary": "Implemented per-app volume mixing with Core Audio process taps. Released as experimental; the label was removed on 9 Nov 2026 after the owner’s hardware check.",
       "status": "Done",
       "caveat": "Recorded in merged private PR #39. Merge alone does not establish installed-app, device or release acceptance.",
       "evidence": []
