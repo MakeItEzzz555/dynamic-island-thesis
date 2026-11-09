@@ -44,7 +44,15 @@ def main():
         raise SystemExit("PRIVATE INVENTORY IS NOT GIT-IGNORED; refusing to continue")
     if out(["git","ls-files","--",".private/history-inventory.json"]):
         raise SystemExit("Private inventory is Git-tracked; refusing to continue")
-    # Do not fetch/update source branches: protects active macOS development and worktrees.
+    # Fetch remote-tracking refs only. Never pull, reset or modify the source worktree.
+    fetch_env = os.environ.copy()
+    fetch_env["GIT_TERMINAL_PROMPT"] = "0"
+    try:
+        result = run(["git","fetch","origin"], cwd=SOURCE, env=fetch_env, check=False)
+        if result.returncode != 0:
+            log("Source fetch unavailable; collecting currently reachable local refs")
+    except Exception as exc:
+        log("Source fetch skipped: "+str(exc))
     env = os.environ.copy()
     if not (env.get("GH_TOKEN") or env.get("GITHUB_TOKEN")) and shutil.which("gh"):
         auth = run(["gh","auth","token"], check=False)
@@ -84,18 +92,49 @@ def main():
     # Idempotent: no timestamps to create spurious commits each day.
     new = json.dumps(public, indent=2, ensure_ascii=False)+"\n"
     old = PROGRESS.read_text() if PROGRESS.exists() else ""
-    if old == new:
+    # New merged private PRs get a deliberately content-free public placeholder.
+    # Never copy raw titles, bodies, branch names or source content to GitHub Pages.
+    milestone_path = ROOT / "data" / "milestones.json"
+    published = json.loads(milestone_path.read_text())
+    existing_ids = {x["id"] for x in published["milestones"]}
+    pending = []
+    for pr in prs:
+        identifier = f'pr-{pr["number"]:03d}'
+        if pr.get("mergedAt") and identifier not in existing_ids:
+            pending.append({
+                "id": identifier,
+                "date": pr["mergedAt"][:10],
+                "kind": "Decision",
+                "title": f'Merged engineering change #{pr["number"]}',
+                "summary": "A private development pull request was merged. A public engineering summary has not yet been reviewed.",
+                "status": "Review",
+                "caveat": "Only the PR number and merge date are published; technical details are withheld pending review.",
+                "evidence": [],
+            })
+    if old == new and not pending:
         log("Progress unchanged; no public update needed")
         return
     # Refuse to overwrite manual edits or synchronize on anything but main.
     if out(["git","branch","--show-current"]) != "main":
         raise SystemExit("Website not on main; public update withheld")
-    if run(["git","diff","--quiet","--","data/progress.json"],check=False).returncode != 0:
-        raise SystemExit("Uncommitted edits in progress.json; refusing overwrite")
-    if out(["git","ls-files","--others","--exclude-standard","--","data/progress.json"]):
-        raise SystemExit("Untracked progress.json already present; refusing overwrite")
-    PROGRESS.write_text(new)
-    log("Wrote safe aggregate progress snapshot")
+    targets=[]
+    if old != new:
+        if run(["git","diff","--quiet","--","data/progress.json"],check=False).returncode != 0:
+            raise SystemExit("Uncommitted edits in progress.json; refusing overwrite")
+        if out(["git","ls-files","--others","--exclude-standard","--","data/progress.json"]):
+            raise SystemExit("Untracked progress.json already present; refusing overwrite")
+        PROGRESS.write_text(new)
+        targets.append("data/progress.json")
+        log("Wrote safe aggregate progress snapshot")
+    if pending:
+        if run(["git","diff","--quiet","--","data/milestones.json"],check=False).returncode != 0:
+            raise SystemExit("Milestone file has local edits; refusing overwrite")
+        published["milestones"] += pending
+        published["milestones"].sort(key=lambda x:(x["date"],x["id"]),reverse=True)
+        published["generatedAt"] = dt.datetime.now(dt.timezone.utc).isoformat()
+        milestone_path.write_text(json.dumps(published, indent=2, ensure_ascii=False)+"\n")
+        targets.append("data/milestones.json")
+        log(f"Added {len(pending)} private-title-free PR review placeholders")
     if args.no_push:
         return
     # Never stage unrelated changes. Do not use GitHub Actions minutes.
@@ -108,8 +147,8 @@ def main():
         if not ancestor:
             log("Remote main moved; leave generated progress local for manual integration")
             return
-        run(["git","add","--","data/progress.json"])
-        run(["git","commit","-m","docs(thesis): refresh verified project activity counts","--only","data/progress.json"])
+        run(["git","add","--",*targets])
+        run(["git","commit","-m","docs(thesis): refresh verified activity and pending milestones","--only",*targets])
         r=run(["git","push","origin","main"],check=False)
         if r.returncode != 0:
             log("Push failed; local commit retained: "+r.stderr.strip()[:300])

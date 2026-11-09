@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "firstCommit": "2026-07-02",
   "lastCommit": "2026-11-09",
-  "reachableCommits": 1072,
+  "reachableCommits": 1075,
   "pullRequests": 78,
   "mergedPullRequests": 68,
   "issues": 4,
@@ -21,7 +21,7 @@
     },
     {
       "month": "2026-11",
-      "commits": 43
+      "commits": 46
     }
   ],
   "scope": "Reachable local Git refs and GitHub PR/issue metadata; not all work or tests.",
