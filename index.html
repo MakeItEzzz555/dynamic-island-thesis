@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Island Studio · DynamicIsland thesis</title>
+<meta name="description" content="How DynamicIsland, a native macOS app for the MacBook notch, was built: development journey, engineering challenges, decisions, roadmap and supervisor review.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FBFAF6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121210" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='11' width='26' height='10' rx='5' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/site.css?v=2026-11-09g">
+<script>try{const t=localStorage.getItem('island-studio-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch{}</script>
+<script type="module" src="assets/app.js?v=2026-11-09g"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-overview" viewBox="0 0 24 24"><path d="M2 5.5h6.5A3.5 3.5 0 0 1 12 9v11a2.5 2.5 0 0 0-2.5-2.5H2zM22 5.5h-6.5A3.5 3.5 0 0 0 12 9v11a2.5 2.5 0 0 1 2.5-2.5H22z"/></symbol>
+    <symbol id="i-journey" viewBox="0 0 24 24"><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H16a3.5 3.5 0 0 0 0-7H8a3.5 3.5 0 0 1 0-7h7.5"/></symbol>
+    <symbol id="i-features" viewBox="0 0 24 24"><path d="m12 2.5 9.5 5-9.5 5-9.5-5z"/><path d="m2.5 12 9.5 5 9.5-5"/><path d="m2.5 16.5 9.5 5 9.5-5"/></symbol>
+    <symbol id="i-challenges" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z"/></symbol>
+    <symbol id="i-decisions" viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M3 8h18M6 8l-3 7a3.5 3.5 0 0 0 6 0zM18 8l-3 7a3.5 3.5 0 0 0 6 0z"/></symbol>
+    <symbol id="i-roadmap" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></symbol>
+    <symbol id="i-quality" viewBox="0 0 24 24"><path d="M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-review" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></symbol>
+    <symbol id="s-merged" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2.5"/><circle cx="18" cy="17" r="2.5"/><path d="M6 7.5V21M6 9c0 5 4 8 9.5 8"/></symbol>
+    <symbol id="s-committed" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M2 12h6.5M15.5 12H22"/></symbol>
+    <symbol id="s-tests" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5.5 9.5A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.5-2.5L14 9V3M7 15h10"/></symbol>
+    <symbol id="s-hardware" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></symbol>
+    <symbol id="s-owner" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20a6 6 0 0 1 12 0M15.5 11.5l2 2 4-4"/></symbol>
+    <symbol id="s-open" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 1 0 18M12 21a9 9 0 0 1 0-18" stroke-dasharray="2.6 2.6"/></symbol>
+    <symbol id="s-planned" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="1.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+    <symbol id="s-superseded" viewBox="0 0 24 24"><path d="M4 7h11a5 5 0 0 1 0 10H8"/><path d="m7 4-3 3 3 3"/></symbol>
+    <symbol id="s-experimental" viewBox="0 0 24 24"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3"/><circle cx="12" cy="14" r="5"/></symbol>
+    <symbol id="s-awaiting" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></symbol>
+  </defs>
+</svg>
+
+<div class="top-rule" aria-hidden="true"></div>
+<header class="masthead">
+  <a class="wordmark" href="#/" aria-label="Island Studio, overview">
+    <span class="wordmark-text">Island Studio</span><span class="island-mark" aria-hidden="true"></span>
+  </a>
+  <p class="issue-line"><span class="issue-title">DynamicIsland · Development record, Jul–Nov 2026</span><span class="issue-meta" id="issueMeta">DynamicIsland thesis</span></p>
+</header>
+
+<div class="nav-sentinel" aria-hidden="true"></div>
+<nav class="primary-nav" id="primaryNav" aria-label="Sections">
+  <button class="menu-button" id="menuButton" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open menu">
+    <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+  </button>
+  <span class="folio" id="folio" aria-hidden="true"></span>
+  <ul class="nav-links" id="navLinks"></ul>
+</nav>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="sidebar" id="sidebar" aria-label="Site menu" data-open="false">
+  <div class="sidebar-head">
+    <a class="sidebar-identity" href="#/"><span class="island-mark small" aria-hidden="true"></span><span><strong>Island Studio</strong><small>DynamicIsland thesis</small></span></a>
+    <button class="icon-button" id="sidebarClose" type="button" aria-label="Close menu"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+  </div>
+  <ul class="tree" id="tree"></ul>
+  <div class="sidebar-foot">
+    <a class="button primary block" href="#/review"><svg class="icon" aria-hidden="true"><use href="#i-review"/></svg>Leave feedback</a>
+    <button class="theme-toggle" type="button" data-theme-toggle><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg><span>Dark appearance</span></button>
+  </div>
+</aside>
+
+<main id="main" tabindex="-1">
+  <div class="loading" role="status">Loading the development record…</div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-rule" aria-hidden="true"></div>
+  <div class="foot-grid">
+    <p><strong>Island Studio</strong> documents the private DynamicIsland repository. Counts are generated on the author's Mac from Git and GitHub metadata; narratives are written by hand. No private source code is published here.</p>
+    <p><a href="https://github.com/MakeItEzzz555/dynamic-island-thesis">Site source on GitHub</a> · <a href="workspace.html">Owner workspace</a> · <button class="link-button" type="button" data-theme-toggle>Toggle appearance</button></p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

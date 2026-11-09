@@ -2,3 +2,11 @@
 .private/
 
 __pycache__/
+
+# Design-process files (direction contract, review captures); GitHub Pages would serve them
+.impeccable/
+.playwright-cli/
+.DS_Store
+# Raw macOS screenshots stay local until reviewed and converted
+assets/**/Screenshot *.png
+assets/Screenshot *.png
