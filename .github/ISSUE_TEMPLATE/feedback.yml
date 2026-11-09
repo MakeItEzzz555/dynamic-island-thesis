@@ -1,0 +1,33 @@
+name: Supervisor feedback
+description: Feedback, a question or a requested change about the DynamicIsland thesis.
+title: "Feedback: "
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reviewing the project. This issue is public. Please do not include personal or confidential information.
+        Its status appears on the thesis site: **Pending → Acknowledged → Addressed → Resolved**.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Type of feedback
+      options:
+        - General feedback
+        - Question
+        - Requested change
+    validations:
+      required: true
+  - type: input
+    id: subject
+    attributes:
+      label: Subject
+      description: Filled in by the site when you start from a milestone, challenge or decision. Leave as is.
+      placeholder: general
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Feedback
+      description: What should change, what is unclear, or what you would like to know.
+    validations:
+      required: true

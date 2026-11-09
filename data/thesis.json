@@ -1,0 +1,853 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-11-09",
+  "project": {
+    "title": "Building a native Dynamic Island for the Mac",
+    "deck": "DynamicIsland is a native macOS app, written in Swift 6 with SwiftUI hosted in AppKit, that turns the MacBook notch into a live, interactive surface: media, timers, files, AI-agent activity, notifications and twenty standalone widgets, all inside one window that never resizes. This site records how it was built, from the first commit on 2 July 2026 to today, and separates what was merged from what has been verified.",
+    "why": "Recent MacBooks have a camera notch but macOS gives it no interactive role. The project asks how far a third-party app can turn that dead area into a useful, glanceable surface using only public, privacy-respecting platform capabilities, and what engineering it takes to make a floating overlay feel native: correct geometry on every display, interruptible motion, keyboard focus that never steals typing, and permissions that are asked for only when needed.",
+    "facts": [
+      [
+        "Platform",
+        "macOS 14.6 or later, menu-bar accessory app"
+      ],
+      [
+        "Language",
+        "Swift 6, built with Swift Package Manager only"
+      ],
+      [
+        "UI",
+        "SwiftUI hosted in one AppKit panel"
+      ],
+      [
+        "Helpers",
+        "Three signed command-line relays for agent hooks"
+      ],
+      [
+        "Automated tests",
+        "3,159 tests, 0 failures, 87 skipped (local run, 9 Nov 2026)"
+      ]
+    ]
+  },
+  "statuses": {
+    "merged": {
+      "label": "Merged",
+      "help": "The change is in the code base. Merging alone proves nothing about hardware or release."
+    },
+    "committed": {
+      "label": "Committed",
+      "help": "Recorded in the Git history before pull requests were used. Not a test or hardware claim."
+    },
+    "tests": {
+      "label": "Verified by tests",
+      "help": "Automated tests lock the behaviour. Not a hardware claim."
+    },
+    "hardware": {
+      "label": "Verified on hardware",
+      "help": "Checked on a real Mac with recorded evidence."
+    },
+    "owner": {
+      "label": "Owner-reported",
+      "help": "The author reports it working on their Mac; no recorded test evidence."
+    },
+    "open": {
+      "label": "Open",
+      "help": "Known gap with a tracking issue."
+    },
+    "planned": {
+      "label": "Planned",
+      "help": "Not started; no completion date is promised."
+    },
+    "superseded": {
+      "label": "Superseded",
+      "help": "Replaced by a later design decision."
+    },
+    "experimental": {
+      "label": "Experimental",
+      "help": "Opt-in and off by default."
+    },
+    "awaiting": {
+      "label": "Awaiting merge",
+      "help": "A fix exists in an open pull request."
+    }
+  },
+  "phases": [
+    {
+      "id": "foundations",
+      "n": 1,
+      "title": "Foundations",
+      "from": "2026-07-01",
+      "to": "2026-08-31",
+      "summary": "Notch geometry, expansion animation, media controls, clipboard history.",
+      "objective": "Prove that a third-party overlay can sit exactly around the hardware notch and expand without looking like a separate window.",
+      "accomplishments": [
+        "First native app and overlay around the notch",
+        "Compact island geometry aligned to the top bezel",
+        "First expansion animations and a stable overlay animation strategy",
+        "Media controls and early Spotify integration",
+        "Clipboard history engine and interface"
+      ],
+      "problems": [
+        "Island size drifted between states",
+        "Compact shoulders and left/right activity regions were unbalanced",
+        "Artwork changes flashed against the transition timing"
+      ],
+      "decisions": [
+        "Derive notch geometry from the screen's safe areas, never from a hard-coded size",
+        "Notchless and external displays get a floating island, never a fake notch"
+      ],
+      "lessons": "Geometry has to come from the platform's own measurements; every hand-tuned size broke on another display.",
+      "verification": "Development history only; no recorded hardware acceptance from this phase.",
+      "limitations": "No commits in August 2026."
+    },
+    {
+      "id": "reliability",
+      "n": 2,
+      "title": "Reliability & agent monitoring",
+      "from": "2026-09-01",
+      "to": "2026-09-30",
+      "summary": "Engineering audit; authenticated loopback-only agent bridge (HMAC); agents interface.",
+      "objective": "Stabilise the foundation, then let the island show what AI coding agents (Codex, Claude Code) are doing, safely.",
+      "accomplishments": [
+        "Foundational reliability audit and correctness repairs",
+        "Loopback-only agent bridge with HMAC-authenticated requests",
+        "Relay helpers that fail open so they never block an agent",
+        "First agent activity views, then an interface overhaul"
+      ],
+      "problems": [
+        "Agent hooks run outside the app and must never stall the agent",
+        "Displayed commands could contain secrets or full paths"
+      ],
+      "decisions": [
+        "Only one dedicated, authenticated route may ever return an approval decision",
+        "Any timeout or transport failure returns no decision, so the agent keeps its own prompt"
+      ],
+      "lessons": "Fail-safe defaults matter more than features when an overlay can influence another program.",
+      "verification": "Automated tests for authentication, ingestion and privacy projection.",
+      "limitations": "Claude Code and generic producers are observation-only by design."
+    },
+    {
+      "id": "interaction",
+      "n": 3,
+      "title": "Interaction model",
+      "from": "2026-10-01",
+      "to": "2026-10-19",
+      "summary": "Two-finger gestures, camera hand navigation, native audio, voice recording, per-app volume.",
+      "objective": "Make the island feel like part of macOS: trackpad gestures, keyboard behaviour and native audio and camera integration.",
+      "accomplishments": [
+        "Two-finger gesture navigation and native Settings organisation",
+        "Camera hand navigation with separate gesture and pointer modes",
+        "Native widgets, audio surfaces and notch context menu",
+        "Voice recording with optional transcription",
+        "Per-app volume mixing using Core Audio process taps"
+      ],
+      "problems": [
+        "Gesture-only layouts drifted off the notch centre",
+        "Tab continuity broke when a page attached late",
+        "Post-merge CI failures needed repair without weakening native assertions"
+      ],
+      "decisions": [
+        "One physical swipe equals exactly one media command",
+        "Experimental surfaces (Lock Screen widgets) stay opt-in and isolated"
+      ],
+      "lessons": "Gesture handling needs explicit ownership of each input session, or momentum tails trigger a second action.",
+      "verification": "Automated tests plus a stabilisation checkpoint with review fixes.",
+      "limitations": "Lock Screen widgets rely on private system interfaces and remain experimental."
+    },
+    {
+      "id": "widgets",
+      "n": 4,
+      "title": "Native widget re-architecture",
+      "from": "2026-10-20",
+      "to": "2026-10-31",
+      "summary": "One widget registry, Shortcuts tab, 20 standalone widgets, Teleprompter, accessibility validation.",
+      "objective": "Replace a compound productivity page with independently addressable native widgets that share one registry and one layout system.",
+      "accomplishments": [
+        "One native widget registry and a Shortcuts tab with a trackpad-scrollable icon row",
+        "Standalone widgets: Notes, Stay Awake, Window Snap, Voice, Reminders, Background Removal, Camera, Lyrics, Screen Recording, AirDrop, File Conversion, Calendar, App Volume and more",
+        "Quick Terminal, synced lyrics and a lid-fold experiment (Mac Duo)",
+        "Teleprompter with live speech",
+        "Clean-room study of a reference app's motion and notifications"
+      ],
+      "problems": [
+        "Several pull requests touched the same shared files in parallel",
+        "Widget sizes depended on their siblings"
+      ],
+      "decisions": [
+        "Widget size is a semantic grid class (Compact 1x1, Standard 2x1, Large 2x2), never a scale factor",
+        "Only an integration owner edits shared navigation and overlay files"
+      ],
+      "lessons": "A single source of geometry truth removed a whole class of layout bugs at once.",
+      "verification": "Automated tests, native acceptance captures and a release review with explicit untested items.",
+      "limitations": "Several widgets still need checks on a real Mac (see Roadmap)."
+    },
+    {
+      "id": "polish",
+      "n": 5,
+      "title": "Polish & performance",
+      "from": "2026-11-01",
+      "to": null,
+      "summary": "Notification banner, MCP connections, permission prompts, Agents composer, motion parity, performance pass.",
+      "objective": "Make everyday use calm and fast: notifications, permissions asked at the right moment, motion tuned against a reference, and measured performance work.",
+      "accomplishments": [
+        "Notification banner with history, reply and opt-in support for other apps",
+        "MCP connection status and permission prompt handling",
+        "Calm new-chat composer with model and reasoning controls",
+        "Animation speeds and delays matched to a reference app, with Faster and Slower presets",
+        "Performance pass guided by Time Profiler captures and a frame-pacing probe"
+      ],
+      "problems": [
+        "Collapse animation built the hidden page needlessly",
+        "Pollers re-published equal values and re-rendered every observer",
+        "Three stacked pull requests were merged into each other instead of into main"
+      ],
+      "decisions": [
+        "No full-history work inside per-frame view code",
+        "Changed-only publishing for every poller"
+      ],
+      "lessons": "Measure first: the profiler, not intuition, found the hot paths.",
+      "verification": "3,159 automated tests passing locally on 9 Nov 2026; frame-pacing logs from the owner's Mac.",
+      "limitations": "The full 120 Hz performance gate is still open (#51)."
+    }
+  ],
+  "featuredChallenge": "shell-morph",
+  "challenges": [
+    {
+      "id": "shell-morph",
+      "title": "Morphing the island without resizing the window",
+      "area": "Window geometry",
+      "phase": "widgets",
+      "status": "tests",
+      "problem": "Expanding the island by resizing its window caused flicker, and wider pages grew to one side only, measured at 26 pt.",
+      "investigation": "Frame-by-frame inspection showed the canvas offset animating separately from the shell during a tab change.",
+      "rootCause": "SwiftUI received the new size one update after the panel resized, so the content was centred on a stale proposal.",
+      "solution": "One fixed, maximum-size transparent panel. SwiftUI morphs the visible shell inside it, the panel never animates in AppKit, and the canvas is pinned top-leading so it never re-centres on the proposal.",
+      "verification": "Shell-morph invariant tests lock the horizontal centre and the top edge through every morph.",
+      "lessons": "When two layout systems disagree for one frame, remove one of them from the animation instead of compensating per frame.",
+      "refs": [
+        "#81"
+      ]
+    },
+    {
+      "id": "collapse-sequencing",
+      "title": "Collapsing without leaving content behind",
+      "area": "Motion",
+      "phase": "widgets",
+      "status": "tests",
+      "problem": "On collapse, page content sometimes stayed visible while the shell shrank, or the island stayed black after a lost animation.",
+      "investigation": "Logging each collapse generation showed SwiftUI animation completions that never arrived.",
+      "rootCause": "Collapse relied on animation callbacks that SwiftUI does not guarantee to deliver.",
+      "solution": "A fixed order: children exit, the exit is acknowledged, then the shell collapses. Each exit runs on its own clock, and a newer collapse acknowledges immediately. No timers decide the order.",
+      "verification": "Unit tests on the exit tracker cover lost completions and repeated collapse requests.",
+      "lessons": "Never make correctness depend on an animation finishing.",
+      "refs": []
+    },
+    {
+      "id": "drag-oscillation",
+      "title": "A drag preview that would not settle",
+      "area": "Interaction",
+      "phase": "widgets",
+      "status": "tests",
+      "problem": "Dragging a widget below another made the preview jump back and forth, so that drop position was unusable.",
+      "investigation": "Recording pointer position against the shell size showed a loop: the preview resized the shell, which moved the target, which changed the preview.",
+      "rootCause": "The pointer was resolved against geometry that the preview itself was changing.",
+      "solution": "Resolve the pointer against the layout as it was when the drag started, keep editing layouts top-anchored, and let the shell grow but never shrink during a drag.",
+      "verification": "Drop-resolver and workspace layout tests; bounce-free springs keep velocity when the target changes.",
+      "lessons": "Feedback that changes its own input needs a fixed reference frame.",
+      "refs": []
+    },
+    {
+      "id": "keyboard-focus",
+      "title": "Typing into an overlay that never takes focus",
+      "area": "Keyboard & accessibility",
+      "phase": "interaction",
+      "status": "tests",
+      "problem": "Clicking a text field in the island did nothing: keystrokes still went to the app behind it.",
+      "investigation": "The island is a non-activating panel so that ordinary clicks never steal focus from the user's work.",
+      "rootCause": "A non-activating panel does not become the key window, so its text fields never receive key events.",
+      "solution": "Only when a click makes a real text input first responder does the panel claim key status, one run-loop turn later. Automatic focus, such as the terminal appearing, never holds the island open.",
+      "verification": "Focus-policy tests plus a native keyboard acceptance harness.",
+      "lessons": "Widen focus rules only for the exact control that needs it; a broad rule would steal typing on every click.",
+      "refs": []
+    },
+    {
+      "id": "agent-approvals",
+      "title": "Agent approvals that fail safe",
+      "area": "Security",
+      "phase": "reliability",
+      "status": "tests",
+      "problem": "Letting the island approve an agent's command is useful but dangerous: a bug or outage must never approve anything.",
+      "investigation": "Threat review of every path from an agent hook to a decision: replay, wrong session, expiry and transport failure.",
+      "rootCause": "A generic event channel cannot tell a real approval request from a forged or stale one.",
+      "solution": "One dedicated, HMAC-authenticated route with exact session and request matching, expiry and one-shot replay protection. Timeouts, shutdown and transport errors return no decision, so the agent keeps its own prompt. Displayed command text is sanitised and bounded.",
+      "verification": "Ingress, authentication and privacy-projection tests.",
+      "lessons": "In a safety feature, 'no answer' must be the default answer.",
+      "refs": []
+    },
+    {
+      "id": "messages-privacy",
+      "title": "Replying to Messages without guessing the chat",
+      "area": "Privacy",
+      "phase": "polish",
+      "status": "tests",
+      "problem": "A reply typed in the island must reach exactly the conversation it came from, and the app must not store message content.",
+      "investigation": "Notification titles and display names are ambiguous: two chats can share a name.",
+      "rootCause": "Matching by display name can send a message to the wrong person.",
+      "solution": "Resolve each notification to one chat through provider-native identifiers in a read-only database; unresolved or ambiguous notifications get no reply option. Send through Apple Events with typed parameters, no script text, and report success only once the message appears in that exact chat.",
+      "verification": "Resolver and send-result tests; message bodies are never logged or persisted.",
+      "lessons": "When identity is uncertain, offer less, not a guess.",
+      "refs": [
+        "#77"
+      ]
+    },
+    {
+      "id": "streaming-text",
+      "title": "A long agent transcript that froze the app",
+      "area": "Performance",
+      "phase": "polish",
+      "status": "tests",
+      "problem": "With a very long transcript visible, the whole app stuttered.",
+      "investigation": "Time Profiler showed the main thread re-processing the same huge text over and over.",
+      "rootCause": "SwiftUI asked the text view to update repeatedly with unchanged text, and each update re-scanned all of it.",
+      "solution": "Cache the applied text and skip identical updates, while still processing changes to active state, Reduce Motion and animation timing.",
+      "verification": "Streaming-text state tests cover the unchanged-text path.",
+      "lessons": "View update calls are not change notifications; compare before doing work.",
+      "refs": [
+        "#81"
+      ]
+    },
+    {
+      "id": "screen-recording-tcc",
+      "title": "A permission that disappeared on every rebuild",
+      "area": "Permissions",
+      "phase": "widgets",
+      "status": "merged",
+      "problem": "After each development rebuild, Screen Recording stopped working and the Allow button did nothing.",
+      "investigation": "macOS records the permission against the app's code signature; ad-hoc builds get a new signature hash every time.",
+      "rootCause": "The old grant no longer matched the new build, and the system silently refused to prompt again.",
+      "solution": "Remember per build that a request was made and show remove-and-re-add guidance instead of looping; use a stable local signing identity so grants survive rebuilds.",
+      "verification": "Gated live tests for the recorder pipeline; the guidance path is merged.",
+      "lessons": "Some failures belong to the platform's security model; the honest fix is to explain them clearly.",
+      "refs": []
+    },
+    {
+      "id": "notifications-scope",
+      "title": "Showing other apps' notifications honestly",
+      "area": "Privacy",
+      "phase": "polish",
+      "status": "superseded",
+      "problem": "The first design promised a marker for every notification on the Mac, but public APIs only expose an app's own notifications.",
+      "investigation": "Documentation review and a clean-room study of how a reference app behaves; tracked in issue #50.",
+      "rootCause": "Reading other apps' notifications needs explicit user consent and access the system does not grant by default.",
+      "solution": "A notification banner with history and reply. Other apps' notifications are shown only after the user opts in and grants Full Disk Access, and are held in memory only.",
+      "verification": "Merged in #77; issue #50 closed as superseded by the banner design on 9 Nov 2026.",
+      "lessons": "Scope features to what the platform legitimately allows, and say so in the interface.",
+      "refs": [
+        "#50",
+        "#77"
+      ]
+    },
+    {
+      "id": "camera-ownership",
+      "title": "Who is allowed to turn the camera on",
+      "area": "Privacy",
+      "phase": "interaction",
+      "status": "open",
+      "problem": "The camera could start when a view merely appeared, and stopping it from one place did not always release it.",
+      "investigation": "Several features share one capture session: the mirror widget, hand navigation and Settings preview.",
+      "rootCause": "Appearing on screen was treated as consent to capture.",
+      "solution": "Capture starts only from an explicit Start; collapsing the island stops mirror-owned capture; hand navigation keeps its own ownership.",
+      "verification": "Capture-ownership tests. Open in #47: the stop button is visible only on hover, and stopping a session owned by hand navigation has no confirmed path yet.",
+      "lessons": "Privacy-sensitive resources need an explicit owner, not a reference count.",
+      "refs": [
+        "#47"
+      ]
+    },
+    {
+      "id": "performance-120hz",
+      "title": "Measuring smoothness instead of assuming it",
+      "area": "Performance",
+      "phase": "polish",
+      "status": "open",
+      "problem": "Expanding, collapsing and switching tabs sometimes felt slower than a reference app on a 120 Hz display.",
+      "investigation": "An opt-in frame-pacing probe logs p50/p95/p99 frame times per transition; Time Profiler captures on the owner's Mac located main-thread bursts.",
+      "rootCause": "Work during animation frames: building a hidden page during collapse, history-wide work in per-frame code, and pollers re-publishing equal values.",
+      "solution": "No page build during the shell shrink, cached derived data, changed-only publishing, and decorations paced to the display refresh rate.",
+      "verification": "Merged in #81 with automated tests. The full gate in #51 (10-minute soak, GPU, 60 Hz external display, Low Power Mode) has not been run.",
+      "lessons": "A frame budget is 8.3 ms at 120 Hz; only measurement shows what spends it.",
+      "refs": [
+        "#51",
+        "#81"
+      ]
+    },
+    {
+      "id": "stacked-prs",
+      "title": "Three merged pull requests that never reached main",
+      "area": "Process",
+      "phase": "polish",
+      "status": "awaiting",
+      "problem": "Pull requests #79, #80 and #81 were reported merged, but their code was missing from main.",
+      "investigation": "Comparing merge commits with main showed each one merged into the branch of the pull request below it in the stack.",
+      "rootCause": "The bottom pull request (#78) was squash-merged first, and the stacked ones were then merged into their old base branches instead of main.",
+      "solution": "A single landing pull request (#83) merges the stack tip into main. Its tree was verified to equal the tested tip plus one unrelated change.",
+      "verification": "Tree comparison against the tested tip; awaiting the owner's merge.",
+      "lessons": "With stacked pull requests, retarget each to main before merging, or merge bottom-up with merge commits.",
+      "refs": [
+        "#83"
+      ]
+    }
+  ],
+  "featureGroups": [
+    {
+      "title": "Island core",
+      "items": [
+        {
+          "name": "Notch-aware island shell",
+          "status": "tests",
+          "detail": "One stable panel; the shell morphs between collapsed and expanded around the physical notch, or floats on notchless displays."
+        },
+        {
+          "name": "Live Activities",
+          "status": "tests",
+          "detail": "An internal activity model (not Apple's iOS-only ActivityKit); the collapsed island shows one winner chosen by deterministic priority.",
+          "shots": [
+            "middle-liveActivities",
+            "reduced-motion-liveActivities"
+          ]
+        },
+        {
+          "name": "Workspace editor",
+          "status": "tests",
+          "detail": "Drag to reorder and resize widgets in semantic sizes; Apply commits once, Cancel restores.",
+          "shots": [
+            "wide-shelf"
+          ]
+        },
+        {
+          "name": "Gestures",
+          "status": "tests",
+          "detail": "Two-finger navigation; one swipe equals one media command."
+        }
+      ]
+    },
+    {
+      "title": "Media & audio",
+      "items": [
+        {
+          "name": "Media",
+          "status": "tests",
+          "detail": "Now Playing with capability-driven controls (Spotify Web API, Music, system sources) and an output picker.",
+          "shots": [
+            "media-lyrics-standard",
+            "media-lyrics-large"
+          ]
+        },
+        {
+          "name": "Synced lyrics",
+          "status": "tests",
+          "detail": "Line-synced lyrics in the Media widget and a companion view.",
+          "shots": [
+            "lyrics-companion-standard"
+          ]
+        },
+        {
+          "name": "App Volume",
+          "status": "owner",
+          "detail": "Per-app volume through Core Audio process taps. Off by default; asks for System Audio Recording only when turned on. Experimental label removed on 9 Nov 2026 after the owner's hardware check (#84)."
+        },
+        {
+          "name": "Voice recording",
+          "status": "tests",
+          "detail": "Native recorder with optional transcription."
+        }
+      ]
+    },
+    {
+      "title": "Productivity widgets",
+      "items": [
+        {
+          "name": "Stay Awake",
+          "status": "tests",
+          "detail": "Prevents idle sleep for a chosen time, with a visible countdown.",
+          "shots": [
+            "awake-large",
+            "awake-standard"
+          ]
+        },
+        {
+          "name": "Quick Terminal",
+          "status": "tests",
+          "detail": "A small shell in the island that runs one command at a time and kills only its own process group.",
+          "shots": [
+            "quick-terminal-running-standard"
+          ]
+        },
+        {
+          "name": "File conversion, AirDrop, File Tray",
+          "status": "tests",
+          "detail": "Drop files to convert, share or shelve them.",
+          "shots": [
+            "accepted-file-popup"
+          ]
+        },
+        {
+          "name": "Notes, Reminders, Calendar, Timer, Window Snap",
+          "status": "tests",
+          "detail": "Standalone widgets in Compact, Standard and Large sizes."
+        },
+        {
+          "name": "Teleprompter",
+          "status": "tests",
+          "detail": "Script reading with live speech tracking; Reduce Motion reads phrase by phrase."
+        }
+      ]
+    },
+    {
+      "title": "Communication",
+      "items": [
+        {
+          "name": "Notifications",
+          "status": "tests",
+          "detail": "Banner, history and reply; other apps only on explicit opt-in.",
+          "shots": [
+            "notifications-standard"
+          ]
+        },
+        {
+          "name": "Messages replies",
+          "status": "tests",
+          "detail": "Replies to the exact chat through Apple Events; no Accessibility scripting."
+        }
+      ]
+    },
+    {
+      "title": "AI agents",
+      "items": [
+        {
+          "name": "Agent monitoring",
+          "status": "tests",
+          "detail": "Codex and Claude Code activity through a loopback-only, HMAC-authenticated bridge."
+        },
+        {
+          "name": "Approvals",
+          "status": "tests",
+          "detail": "Codex permission requests can be approved from the island; failure always returns no decision."
+        },
+        {
+          "name": "Agents composer",
+          "status": "merged",
+          "detail": "Start a chat with model and reasoning controls (#80, landing on main through #83)."
+        }
+      ]
+    },
+    {
+      "title": "Settings",
+      "items": [
+        {
+          "name": "Native Settings window",
+          "status": "tests",
+          "detail": "Grouped panes for every module, previews with sample content, and permission setup.",
+          "shots": [
+            "fullscreen-general",
+            "middle-moduleStore"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Experimental and unverified",
+      "items": [
+        {
+          "name": "Lock Screen widgets",
+          "status": "experimental",
+          "detail": "Opt-in and off by default; relies on private system interfaces.",
+          "shots": [
+            "wide-lockScreen"
+          ]
+        },
+        {
+          "name": "Mac Duo lid fold",
+          "status": "open",
+          "detail": "A display-fold effect when the lid closes; the physical fold has not been verified on hardware (#47)."
+        }
+      ]
+    }
+  ],
+  "screenshots": {
+    "provenance": "Rendered on 9 Nov 2026 by the app's built-in native acceptance harness from the latest code, using sample content only. Approved for publication by the author.",
+    "items": {
+      "media-lyrics-standard": "Media, Standard size, with synced lyrics",
+      "media-lyrics-large": "Media, Large size, with lyrics and volume",
+      "lyrics-companion-standard": "Lyrics companion view",
+      "awake-large": "Stay Awake, Large size",
+      "awake-standard": "Stay Awake, Standard size",
+      "quick-terminal-running-standard": "Quick Terminal running a command",
+      "accepted-file-popup": "File conversion after dropping an audio file",
+      "notifications-standard": "Notifications widget, empty state",
+      "middle-liveActivities": "Settings: Live Activities layout preview",
+      "reduced-motion-liveActivities": "Settings: Live Activities with Reduce Motion",
+      "wide-shelf": "Settings: widget layout preview",
+      "fullscreen-general": "Settings: General",
+      "middle-moduleStore": "Settings: modules",
+      "wide-lockScreen": "Settings: experimental Lock Screen widgets"
+    }
+  },
+  "architecture": [
+    {
+      "layer": "App",
+      "parts": [
+        "Menu-bar accessory app",
+        "Composition root wires every store",
+        "Settings window"
+      ]
+    },
+    {
+      "layer": "Overlay",
+      "parts": [
+        "One stable transparent panel",
+        "Shape-aware click-through",
+        "Notch geometry from screen safe areas"
+      ]
+    },
+    {
+      "layer": "Views",
+      "parts": [
+        "SwiftUI shell morph",
+        "Widgets in semantic grid sizes",
+        "Live Activity winner"
+      ]
+    },
+    {
+      "layer": "Modules",
+      "parts": [
+        "Media, timer, files, clipboard",
+        "Productivity controllers",
+        "Capability registry"
+      ]
+    },
+    {
+      "layer": "Agents",
+      "parts": [
+        "Loopback HMAC bridge",
+        "Ingestion and event store",
+        "Transcript recovery"
+      ]
+    },
+    {
+      "layer": "Helpers",
+      "parts": [
+        "Agent relay",
+        "Codex hook relay",
+        "Claude hook relay"
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "single-panel",
+      "date": "2026-07-02",
+      "title": "One stable window, with the shape morphing inside it",
+      "context": "The island changes size constantly.",
+      "decision": "Keep one maximum-size transparent panel fixed and let SwiftUI morph the visible shell inside it.",
+      "alternatives": [
+        "Resize the window for each state",
+        "Swap between separate collapsed and expanded windows",
+        "Compensate the window position every frame"
+      ],
+      "consequences": "No flicker or one-sided growth; click-through must be shape-aware so the empty panel area never blocks the desktop."
+    },
+    {
+      "id": "swiftpm",
+      "date": "2026-07-02",
+      "title": "Swift Package Manager only, no Xcode project",
+      "context": "Builds are run by scripts, agents and CI.",
+      "decision": "Build, test and package with SwiftPM and a packaging script that owns Info.plist and signing.",
+      "alternatives": [
+        "An Xcode project",
+        "A hybrid of both"
+      ],
+      "consequences": "Reproducible command-line builds; every privacy usage string and helper binary is declared in one script."
+    },
+    {
+      "id": "internal-activities",
+      "date": "2026-07-24",
+      "title": "An internal Live Activity model",
+      "context": "Apple's ActivityKit and Dynamic Island APIs are for iPhone, not the Mac.",
+      "decision": "Model activities internally and choose one winner by deterministic priority for the collapsed island.",
+      "alternatives": [
+        "Show several activities at once",
+        "Show the most recent activity"
+      ],
+      "consequences": "Predictable presentation; each activity has its own width profile around the notch."
+    },
+    {
+      "id": "fail-safe-approvals",
+      "date": "2026-09-24",
+      "title": "Approvals fail safe; most producers only observe",
+      "context": "Agents can ask permission to run commands.",
+      "decision": "Only one authenticated Codex route may return a decision; everything else is observation-only, and failures return no decision.",
+      "alternatives": [
+        "Approvals for every agent",
+        "Auto-approve on timeout"
+      ],
+      "consequences": "Less convenience, no path for an outage to approve anything."
+    },
+    {
+      "id": "semantic-sizes",
+      "date": "2026-10-20",
+      "title": "Widget size is a semantic class, never a scale factor",
+      "context": "Widgets looked different depending on their neighbours.",
+      "decision": "Compact, Standard and Large are grid spans from one unit; each size has its own layout, and the saved size owns the geometry.",
+      "alternatives": [
+        "Scale widgets to fill the shell",
+        "Size widgets from their content"
+      ],
+      "consequences": "A widget looks the same everywhere; narrow hosts wrap instead of shrinking."
+    },
+    {
+      "id": "public-apis",
+      "date": "2026-10-20",
+      "title": "Public, consented platform access only",
+      "context": "Several features touch notifications, messages, camera and screen.",
+      "decision": "Use public APIs, ask for each permission at the moment a feature needs it, and keep anything relying on private interfaces opt-in and labelled.",
+      "alternatives": [
+        "Prompt for everything at launch",
+        "Scrape other apps' interfaces through Accessibility"
+      ],
+      "consequences": "Some features are narrower than competitors', and the interface says why."
+    },
+    {
+      "id": "measured-motion",
+      "date": "2026-11-08",
+      "title": "Match motion to a measured reference",
+      "context": "Transitions felt slower than a reference app.",
+      "decision": "Study the reference app's behaviour clean-room and adopt its timings as defaults, with Faster and Slower presets around them.",
+      "alternatives": [
+        "Tune timings by eye",
+        "Copy implementation details"
+      ],
+      "consequences": "Comparable feel with an original implementation; timings are named tokens rather than scattered numbers."
+    },
+    {
+      "id": "local-first-thesis",
+      "date": "2026-11-09",
+      "title": "A local-first thesis record",
+      "context": "The app repository is private and hosted CI minutes are exhausted.",
+      "decision": "A scheduled job on the author's Mac publishes aggregate counts and content-free placeholders to this public site; narratives are written by hand.",
+      "alternatives": [
+        "Publish the private history",
+        "A hosted scheduled workflow"
+      ],
+      "consequences": "No private material leaves the private repository; new work appears as 'review pending' until it is written up."
+    }
+  ],
+  "roadmap": [
+    {
+      "title": "Land #79–#81 on main",
+      "status": "awaiting",
+      "detail": "Merge the landing pull request so motion parity, composer controls and the performance pass are on main.",
+      "ref": "#83"
+    },
+    {
+      "title": "Remove the App Volume experimental label",
+      "status": "awaiting",
+      "detail": "String-only change; 3,159 tests pass.",
+      "ref": "#84"
+    },
+    {
+      "title": "Camera stop always visible",
+      "status": "open",
+      "detail": "Make the stop control visible during live capture, not only on hover, and add a confirmed path when hand navigation owns the camera.",
+      "ref": "#47"
+    },
+    {
+      "title": "Vertical media visualizer gradient",
+      "status": "open",
+      "detail": "A top-to-bottom gradient inside each media bar.",
+      "ref": "#47"
+    },
+    {
+      "title": "Physical Mac Duo lid-fold test",
+      "status": "open",
+      "detail": "Verify the fold on hardware with privacy-safe logs.",
+      "ref": "#47"
+    },
+    {
+      "title": "120 Hz performance gate",
+      "status": "open",
+      "detail": "Soak, GPU, 60 Hz external display and Low Power Mode measurements with recorded conditions.",
+      "ref": "#51"
+    },
+    {
+      "title": "Agent glow follows the shown session",
+      "status": "open",
+      "detail": "The collapsed glow colour can come from a different session than the one the live activity shows; unknown producers should expire when silent."
+    },
+    {
+      "title": "Parity acceptance harness crash",
+      "status": "open",
+      "detail": "The parity harness ended with an uncaught exception after saving its captures on 9 Nov 2026."
+    },
+    {
+      "title": "Cross-display native acceptance",
+      "status": "planned",
+      "detail": "Validate notch geometry, widget sizing and navigation across supported displays."
+    },
+    {
+      "title": "Physical hardware and permission verification",
+      "status": "planned",
+      "detail": "Supervised physical testing, permission checks and installed-app acceptance."
+    },
+    {
+      "title": "Distribution readiness",
+      "status": "planned",
+      "detail": "Packaged-app regression, signing, notarisation, rollback and release documentation."
+    }
+  ],
+  "quality": {
+    "pipeline": [
+      "Whitespace check on the diff",
+      "Debug build",
+      "Full test suite",
+      "Release build",
+      "Packaging into an app bundle",
+      "Strict signature checks on the app and its three helpers"
+    ],
+    "evidence": [
+      {
+        "title": "Automated tests",
+        "status": "tests",
+        "detail": "3,159 tests, 0 failures, 87 skipped, in a local run on 9 Nov 2026. Skipped tests are gated live-hardware checks (camera, audio, screen recording)."
+      },
+      {
+        "title": "Native acceptance harnesses",
+        "status": "tests",
+        "detail": "Built-in modes render every widget size, Settings pane and live activity with sample content and save captures; the screenshots on this site come from them."
+      },
+      {
+        "title": "Hosted CI",
+        "status": "open",
+        "detail": "GitHub Actions minutes are constrained, so recent runs are local. Results here are local unless a pull request says otherwise."
+      },
+      {
+        "title": "Accessibility",
+        "status": "merged",
+        "detail": "Reduce Motion paths for every animated surface, accessibility labels and actions on controls, keyboard focus policy. No formal VoiceOver audit has been recorded."
+      },
+      {
+        "title": "Performance",
+        "status": "open",
+        "detail": "Frame-pacing probe and profiler-guided fixes merged; the full 120 Hz gate is open (#51)."
+      },
+      {
+        "title": "Hardware acceptance",
+        "status": "planned",
+        "detail": "Installed-app checks on a real Mac are tracked on the Roadmap; merges are not presented as hardware verification."
+      }
+    ]
+  },
+  "supervisorQuestions": [
+    "Is automated testing plus a recorded hardware checklist an acceptable evaluation method, given that some checks need physical hardware?",
+    "Should the thesis treat the AI-agent integration as a core chapter or as one case study among the widgets?",
+    "Is a clean-room behavioural study of a reference app acceptable as part of the research method?"
+  ]
+}
